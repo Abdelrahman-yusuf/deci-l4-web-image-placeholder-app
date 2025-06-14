@@ -1,126 +1,296 @@
-# Project Summary
+# Image Processing Web App
 
-This project aims to give you a real-world scenario in which you would read and write to your disk via a Node.js express server rather than a database. The project you create serves two purposes: to prepare you for setting up scalable code and architecture for real-world projects and tie together some of the most popular middleware and utilities found in Node.js projects. This project barely touches the surface of what is possible but will prove your ability to use what you’ve learned in real-world scenarios.
+A comprehensive web application for image processing with resizing, uploading, and caching capabilities. Built with Node.js, Express, TypeScript, and Sharp for high-performance image manipulation.
 
-For this project, refactor and test as much as possible while you are building. Since you are using TypeScript and an unfamiliar library, it is sometimes easier to write and build in plain JS to see what your functions return; remember, your submission needs to be in TypeScript. As your skills improve, typing in TypeScript will feel more intuitive. Make sure to remove any debugging code from your final submission.
+## Features
 
-## What Will You Build?
+- **Image Upload**: Upload JPG, PNG, GIF, BMP, and TIFF images up to 10MB
+- **Image Processing**: Resize images with Sharp library
+- **Caching System**: Automatically cache processed images to improve performance
+- **Interactive Gallery**: Browse uploaded images with thumbnail previews
+- **RESTful API**: Well-documented endpoints for programmatic access
+- **Modern Frontend**: Responsive web interface with real-time feedback
+- **Error Handling**: Comprehensive error handling with user-friendly messages
+- **TypeScript**: Full TypeScript implementation for better code quality
 
-You will be building a single-page web app with an API that can be used for both resizing images and serving the store images.
+## Table of Contents
 
-The backend has two primary functions:
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [API Documentation](#api-documentation)
+- [Frontend Features](#frontend-features)
+- [Testing](#testing)
+- [Project Structure](#project-structure)
+- [Dependencies](#dependencies)
+- [Development](#development)
 
-1. **Placeholder Image Generator:** The image generator API endpoint will generate images with the size set via URL parameters. This will allow you to place images into your frontend for rapid prototyping.
-1. **Cached Image Library:** The API will also store the resized images as you create them.  When an image request is sent, your code will check to see if the image already exists in the library.  If it has been created, the API will return a link to that image.  If it hasn't, a new image will be created and stored, and the link to the newly created image will be returned.
+## Installation
 
-The frontend will allow users to:
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd image-processing-web-app
+```
 
-* Select an existing image from a local "images" folder for resizing.
-* Set the desired height and width parameters and click a button that returns a URL for the API image generator that can be used for placeholder images.
-* Upload new images to your "images" folder and display them on the page so they can be selected for placeholder image generation.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You will:
+3. Build the project:
+```bash
+npm run build
+```
 
-* Set up both your frontend and your Node.js backends from scratch.
-* Install all dependencies.
-* Write all necessary configurations to make your dependencies work together.
-* Use TypeScript to write your code.
-* Create unit tests for each API endpoint.
-* Use Prettier and ESLint to identify problems in your code.
+## Quick Start
 
-## Getting Started
+1. Start the development server:
+```bash
+npm run dev
+```
 
-Usually, you would get some starter code to build from, but with this project, it’s your job to prove you can do it from scratch, so all that is being provided for you is a folder of license-free stock images you are welcome to use. If you would like to use your own images for this project, you are welcome to do so, but whoever reviews your project will see your images, and when you display your project online, viewers will also see them.
+2. Or start the production server:
+```bash
+npm start
+```
 
-You can use your own images or use the ones provided in this folder: [starter/images](starter/images)
+3. Open your browser and navigate to `http://localhost:3000`
 
-## Detailed Instructions
+The application will be running with:
+- Frontend accessible at the root URL
+- API endpoints available at `/api`
+- Image files served from `/images` and `/processed`
 
-Feel free to attempt to create this project based on the overview and Rubric specifications. If you get stuck or prefer structured guidance -- here is a walkthrough to get you up and running!
+## API Documentation
 
-## Build the Backend First
+### Base URL
+All API endpoints are prefixed with `/api`
 
-Although it might seem intuitive to start with the frontend when building a new application, beginning with the backend offers several advantages.
+### Endpoints
 
-First, starting with the backend allows you to establish a solid foundation and architecture for your application. It ensures that all the necessary data structures, APIs, and server-side logic are in place, which will dictate how the frontend will interact with your application. By having a clear understanding of the capabilities and constraints of your backend, you can design a more efficient and effective frontend.
+#### 1. Health Check
+**GET** `/api/health`
 
-Additionally, this approach encourages you to think critically about the user's needs and the data flow rather than getting prematurely caught up in the visual aspects of the project.
+Check if the server is running.
 
-### Set up the backend with Node
+**Response:**
+```json
+{
+  "status": "OK",
+  "message": "Server is running"
+}
+```
 
-1. **Initialize your project.** Add the dependencies required for this project, including Express, TypeScript, Jasmine, Eslint, and Prettier. Complete your package.json file.
-   * Where should your dependencies be placed?
-   * What scripts should you create to take advantage of the dependencies you've added?
-   * Are there other dependencies you would like to add or know you will need to improve your workflow?
-1. **Set up your project structure.** Create folders and files for what you anticipate you will need for the project.
-   * How do you plan to keep your source code and build code separately?
-   * Where will you place your frontend code?
-   * Where will you keep your tests?
-   * How do you plan to name your routes? Utilities?
-1. **Configure your middleware and dependencies.** You have quite a few dependencies that all need to work together. Sometimes, it's easiest to write some simple JavaScript functions to test that all of your dependencies work together before you begin adding any functionality.
-   * Does your TypeScript compile?
-   * Do your Eslint and Prettier scripts work?
-   * Are you able to write and pass a basic unit test?
-1. **Set up your server and create an API endpoint.** Even though this application is fairly straightforward, you still want to set it up in a scalable way. How can you set up your server and route to make your project scalable? It's best to create this and test that it is working before you move on.
-1. **Start writing your README.** You will be required to submit a detailed README.md file with your project. You can start by writing an introduction to the project.
+#### 2. Get Available Images
+**GET** `/api/images`
 
-### Set up Sharp
+Retrieve a list of all available images for processing.
 
-1. **Install [Sharp](https://www.npmjs.com/package/sharp)**. Documentation for Sharp can be found at [npmjs: sharp](https://www.npmjs.com/package/sharp). You'll need to read the documentation carefully.
-1. **Set up the endpoint for Sharp**. There is limited information on using Sharp with TypeScript, but don't let that be a blocker. Think about which type the Sharp constructor would return. Have a look at the examples in the [Sharp documentation](https://sharp.pixelplumbing.com/api-constructor) You are required to:
-   * Create a separate module for your processing functionality and import it into your route.
-   * Add resizing for jpg images.
-1. **Document the endpoint in your README.** The documentation should help the users understand how to make an API call to this endpoint.
+**Response:**
+```json
+{
+  "success": true,
+  "images": ["image1.jpg", "image2.png"],
+  "count": 2
+}
+```
 
-### Set up Testing
+#### 3. Process Image
+**GET** `/api/images/process`
 
-If you haven't already been writing unit tests, now would be the time to start. Think about what you should test. At a minimum, you should have:
+Process and resize an image. The processed image is cached for subsequent requests.
 
-* At least one test for your endpoint.
-* At least one test for your image processing.
+**Query Parameters:**
+- `filename` (required): Name of the image file to process
+- `width` (optional): Target width in pixels (1-5000)
+- `height` (optional): Target height in pixels (1-5000)
 
-In your README, let users know how to run the test scripts in your project.
+**Example Request:**
+```
+GET /api/images/process?filename=sample.jpg&width=300&height=200
+```
 
-> This is just the start. Continue to add tests to cover new features as you build out the project.
->
+**Success Response:**
+```json
+{
+  "success": true,
+  "message": "Image processed successfully",
+  "data": {
+    "filename": "sample_300x200.jpg",
+    "width": 300,
+    "height": 200,
+    "format": "jpeg",
+    "size": 15420,
+    "url": "/processed/sample_300x200.jpg",
+    "cached": false
+  }
+}
+```
 
-### Add Caching
+**Error Responses:**
+- `400`: Invalid parameters (missing filename, invalid dimensions)
+- `404`: Image file not found
+- `500`: Image processing failed
 
-Add caching to your application so that repeated requests to your endpoint use pre-stored images rather than regenerating a new image each time.  Describe this feature in your README.
+#### 4. Upload Image
+**POST** `/api/upload`
 
-### Add Image Uploading
+Upload a new image file to the server.
 
-1. **Install [Multer](https://www.npmjs.com/package/multer):** Documentation can be found at [npmjs: multer](https://www.npmjs.com/package/multer).  Again, you'll need to read the documentation carefully. You'll also need to add type definitions.  Fortunately, you can find a package to help here: [npmjs: @types/multerr](https://www.npmjs.com/package//@types/multer).
-1. **Set up the endpoint for file uploads:** You will upload jpg images to a specific folder in your project using Multer's disk storage engine. See the code examples in the documentation to help you get started. As you build your endpoint, think about what should happen when a user tries to upload a file that is not a `.jpg` file.
-1. **Test your code:**
-    1. Do the unit tests you wrote for image uploading work?
-    1. Do the unit tests you wrote for the image processing still work?
-1. **Document this new feature in your README:** Make sure users know how it works and how to test it.
+**Request:**
+- Content-Type: `multipart/form-data`
+- Field name: `image`
+- Supported formats: JPG, PNG, GIF, BMP, TIFF
+- Maximum file size: 10MB
 
-## Build the Frontend
+**Success Response:**
+```json
+{
+  "success": true,
+  "message": "Image uploaded successfully",
+  "data": {
+    "filename": "uploaded_image_1234567890.jpg",
+    "originalName": "my-image.jpg",
+    "size": 524288,
+    "mimetype": "image/jpeg",
+    "uploadDate": "2023-12-07T10:30:00.000Z"
+  }
+}
+```
 
-Now that your API is set up and your endpoints are working, it's time to build a frontend to make it easier for users to access the API's features.
+**Error Responses:**
+- `400`: No file provided, invalid file type, or file too large
+- `500`: Upload failed
 
-Using your knowledge of HTML, CSS, and JavaScript, build an attractive frontend that allows users to:
+### Error Handling
 
-* See available images displayed as a gallery of small uniform images (thumbnails).
-* Select an image for resizing, set a width and height and receive a URL to request a resized image.
-* Upload new images that are immediately displayed in the image gallery.
+All API endpoints return consistent error responses:
 
-As you build your frontend, don't forget to update your README to describe the features you are adding and let users know how to test them.
+```json
+{
+  "success": false,
+  "message": "Error description",
+  "error": "Detailed error message"
+}
+```
 
-Be creative and have fun with the frontend!
+Common error scenarios handled:
+- Missing filename, height, or width parameters
+- Invalid input for filename (non-string)
+- Invalid input for height or width (non-numeric, zero, negative)
+- Image file does not exist
+- Unsupported file types for upload
+- File size exceeding limits
 
-## Version Control
+## Frontend Features
 
-Although not a requirement, we recommend using Git from the very beginning. Make sure to commit often and use well-formatted messages that conform to our [Git Style Guide](https://udacity.github.io/git-styleguide/).
+### Image Gallery
+- Displays thumbnail-sized images (150px height) for all available images
+- Click any image to select it for processing
+- Visual feedback for selected images
+- Responsive grid layout
 
-Using Git and pushing to a repository is the best way to back up and get a copy of your work.
+### Image Upload
+- Drag-and-drop file selection
+- File type validation
+- File size validation (10MB limit)
+- Real-time upload progress
+- Immediate gallery update after successful upload
 
-## Build, Document, and Submit
+### Image Processing
+- Form to set desired width and height
+- Real-time validation of input values
+- Display of processed image with metadata
+- API URL generation for direct access
+- Copy-to-clipboard functionality for API URLs
 
-If everything else has gone well, you should be able to compile your typescript and start up your production server to test that everything still works as expected. Make sure you've provided all necessary information in your README file so your reviewer knows how to test your API. If everything works and your documentation is complete, you're ready to submit!
+### User Experience
+- Loading states for all operations
+- Success/error notifications
+- Responsive design for mobile devices
+- Error modal for detailed error messages
+- Visual feedback for all user interactions
 
-## License
+## Testing
 
-[License](LICENSE.txt)
+The project includes comprehensive test suites using Jasmine and SuperTest.
+
+### Run Tests
+```bash
+npm test
+```
+
+### Test Coverage
+- **Image Processing Module Tests**: Tests for the Sharp image processing functionality
+- **API Endpoint Tests**: Tests for all REST API endpoints
+- **Error Handling Tests**: Tests for various error scenarios
+
+### Test Files
+- `src/tests/imageProcessorSpec.ts`: Tests image processing functions
+- `src/tests/endpointsSpec.ts`: Tests API endpoints
+
+## Project Structure
+
+```
+deci-l4-web-image-placeholder-app/
+├── src/                          # Source code (TypeScript)
+│   ├── index.ts                 # Main server file
+│   ├── routes/                  # Route handlers
+│   │   ├── imageRoutes.ts       # Image processing routes
+│   │   └── uploadRoutes.ts      # File upload routes
+│   ├── utils/                   # Utility modules
+│   │   └── imageProcessor.ts    # Sharp image processing logic
+│   └── tests/                   # Test files
+│       ├── imageProcessorSpec.ts
+│       └── endpointsSpec.ts
+├── dist/                        # Compiled JavaScript (generated)
+├── frontend/                    # Frontend code
+│   ├── index.html              # Main HTML file
+│   ├── styles.css              # CSS styles
+│   └── script.js               # JavaScript functionality
+├── images/                      # Uploaded images storage
+├── processed/                   # Processed images cache
+├── spec/                        # Jasmine configuration
+│   └── support/
+│       └── jasmine.json
+├── package.json                 # Dependencies and scripts
+├── tsconfig.json               # TypeScript configuration
+├── .eslintrc.json              # ESLint configuration
+├── .prettierrc                 # Prettier configuration
+└── README.md                   # This file
+```
+
+## Dependencies
+
+### Production Dependencies
+- **express**: Web framework for Node.js
+- **sharp**: High-performance image processing library
+- **multer**: Middleware for handling multipart/form-data (file uploads)
+- **cors**: Cross-Origin Resource Sharing middleware
+
+### Development Dependencies
+- **typescript**: TypeScript compiler
+- **@types/***: Type definitions for TypeScript
+- **eslint**: Code linting tool
+- **prettier**: Code formatting tool
+- **jasmine**: Testing framework
+- **supertest**: HTTP assertion library for testing
+- **nodemon**: Development server with auto-restart
+
+## Development
+
+### Available Scripts
+
+- `npm run build`: Compile TypeScript to JavaScript
+- `npm start`: Run the production server
+- `npm run dev`: Run development server with auto-restart
+- `npm test`: Run all tests
+- `npm run lint`: Check code for linting errors
+- `npm run lint:fix`: Fix linting errors automatically
+- `npm run prettier`: Format code with Prettier
+- `npm run prettier:check`: Check if code is formatted correctly
+
+### Code Quality
+- **TypeScript**: Strict type checking enabled
+- **ESLint**: Configured with recommended rules
+- **Prettier**: Consistent
